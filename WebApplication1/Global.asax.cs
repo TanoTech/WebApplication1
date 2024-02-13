@@ -2,30 +2,25 @@
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
 
 namespace WebApplication1
 {
-    public class Global : System.Web.HttpApplication
+    public class Global : HttpApplication
     {
-        protected void Application_BeginRequest(Object sender, EventArgs e)
+        protected void Application_PostAcquireRequestState(object sender, EventArgs e)
         {
-            var requestedPath = HttpContext.Current.Request.Path.ToLowerInvariant();
+            var requestedPath = Request.Path.ToLowerInvariant();
 
-            if (!requestedPath.EndsWith("login.aspx"))
+            if (!requestedPath.EndsWith("/login.aspx") && Session["Username"] == null)
             {
-                HttpCookie usernameCookie = HttpContext.Current.Request.Cookies["Username"];
+                Response.Redirect("Login.aspx");
 
-                if (usernameCookie == null)
-                {
-                    HttpContext.Current.Response.Redirect("Login.aspx");
-                }
-            }
-            else if (requestedPath.EndsWith("login.aspx") && HttpContext.Current.Request.Cookies["Username"] != null)
-            {
-                HttpContext.Current.Response.Redirect("Welcome.aspx");
+
+
             }
         }
     }

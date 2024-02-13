@@ -12,20 +12,30 @@ namespace WebApplication1
     {
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-  
-            if (!string.IsNullOrWhiteSpace(txtUsername.Text))
-            {
-                HttpCookie usernameCookie = new HttpCookie("Username", txtUsername.Text.Trim());
-                usernameCookie.Expires = DateTime.Now.AddHours(1); 
-                Response.Cookies.Add(usernameCookie);
 
-                Response.Redirect("Welcome.aspx");
-            }
-            else
+            if (string.IsNullOrWhiteSpace(txtUsername.Text))
             {
-                lblError.Text = "Per favore, inserisci una username valida.";
-
+                lblError.Text = "Per favore, inserisci un username.";
+                return;
             }
+
+            if (txtPassword.Text != txtPassword2.Text)
+            {
+                lblError.Text = "Le password non coincidono.";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                lblError.Text = "Per favore, inserisci una password.";
+                return;
+            }
+
+            Session["Username"] = txtUsername.Text.Trim();
+        
+
+
+            Response.Redirect("Welcome.aspx");
         }
     }
 }

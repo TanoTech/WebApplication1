@@ -11,21 +11,22 @@ namespace WebApplication1
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-  
-            if (Request.Cookies["Username"] != null)
+
+            if (Session["Username"] == null)
             {
-                lblUsername.Text = Request.Cookies["Username"].Value;
+                Response.Redirect("Login.aspx");
             }
             else
             {
-  
-                Response.Redirect("Login.aspx");
+               
+                lblUsername.Text = Session["Username"].ToString();
             }
         }
 
         protected void btnLogout_Click(object sender, EventArgs e)
-        { 
-            Response.Cookies["Username"].Expires = DateTime.Now.AddDays(-1);
+        {
+            Session.Clear();
+            Session.Abandon();
             Response.Redirect("Login.aspx");
         }
     }
